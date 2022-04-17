@@ -10,28 +10,21 @@ var numberMap = new Map(
     ]
 );
 
-var romanMap = new Map(
-    [
-        ['I', '1'], 
-        ['V', '5'], 
-        ['X', '10'], 
-        ['L', '50'], 
-        ['C', '100'], 
-        ['D', '500'], 
-        ['M', '1000']
-    ]
-);
+var romanMap = new Map();
+numberMap.forEach((value, key) => romanMap.set(value, key));
 
 function convertRomanBtnClick() {
     var romanInput = document.getElementById("input-roman");
     var numberInput = document.getElementById("input-number");
+
+    numberInput.value = convertRomanToNumber(romanInput.value.trim());
 }
 
 function convertNumberBtnClick() {
     var romanInput = document.getElementById("input-roman");
     var numberInput = document.getElementById("input-number");
     
-    romanInput.value = String(convertNumberToRoman(numberInput.value.trim()));
+    romanInput.value = convertNumberToRoman(numberInput.value.trim());
 }
 
 function convertNumberToRoman(inputNumberString) {
@@ -89,6 +82,29 @@ function generateRomanString(decimalMultiplier, _firstDigit, _inputNumberString,
 }
 
 function convertRomanToNumber(inputRomanString) {
+    const firstLetter = inputRomanString.length > 0 ? inputRomanString.charAt(0) : '';
+    const secondLetter = inputRomanString.charAt(1);
     
-    return 0;
+    if (inputRomanString.length === 0) {
+        return 0;
+    }
+    else {
+        const currentRomanValueString = romanMap.get(firstLetter);
+        const nextRomanValueString = romanMap.get(secondLetter);
+        const currentRomanValue = Number(currentRomanValueString);
+        const nextRomanValue = Number(nextRomanValueString);
+        
+        if (currentRomanValue) {
+            console.warn('Input romanValue: ', currentRomanValue);
+
+            if ((currentRomanValue === 1 && nextRomanValue === 5) || (currentRomanValue === 10 && nextRomanValue === 50) || (currentRomanValue === 100 && nextRomanValue === 500) ||
+            (currentRomanValue === 1 && nextRomanValue === 10) || (currentRomanValue === 10 && nextRomanValue === 100) || (currentRomanValue === 100 && nextRomanValue === 1000)) {
+                return nextRomanValue - currentRomanValue + convertRomanToNumber(inputRomanString.slice(2));
+            }
+
+            return currentRomanValue + convertRomanToNumber(inputRomanString.slice(1));
+        } else {
+            return 0;
+        }
+    }
 }
