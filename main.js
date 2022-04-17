@@ -60,24 +60,24 @@ function convertNumberToRoman(inputNumberString) {
         }
         return 'Cannot be more than 1000';
     }
-}
 
-function generateRomanString(decimalMultiplier, _firstDigit, _inputNumberString, _inputNumber) {
-    const one = 1 * decimalMultiplier;
-    const fifth = 5 * decimalMultiplier;
-    const tenth = 10 * decimalMultiplier;
-    
-    if (_firstDigit === 4) {
-        return numberMap.get(String(one)) + numberMap.get(String(fifth)) + convertNumberToRoman(_inputNumberString.slice(1));
-    } 
-    else if (_firstDigit === 9) {
-        return numberMap.get(String(one)) + numberMap.get(String(tenth)) + convertNumberToRoman(_inputNumberString.slice(1));
-    }
-    else if (_firstDigit < 5) {
-        return numberMap.get(String(one)) + convertNumberToRoman(String(_inputNumber - (one)));
-    } 
-    else if (_firstDigit >= 5) {
-        return numberMap.get(String(fifth)) + convertNumberToRoman(String(_inputNumber - (fifth)));
+    function generateRomanString(decimalMultiplier, _firstDigit, _inputNumberString, _inputNumber) {
+        const one = 1 * decimalMultiplier;
+        const fifth = 5 * decimalMultiplier;
+        const tenth = 10 * decimalMultiplier;
+        
+        if (_firstDigit === 4) {
+            return numberMap.get(String(one)) + numberMap.get(String(fifth)) + convertNumberToRoman(_inputNumberString.slice(1));
+        } 
+        else if (_firstDigit === 9) {
+            return numberMap.get(String(one)) + numberMap.get(String(tenth)) + convertNumberToRoman(_inputNumberString.slice(1));
+        }
+        else if (_firstDigit < 5) {
+            return numberMap.get(String(one)) + convertNumberToRoman(String(_inputNumber - (one)));
+        } 
+        else if (_firstDigit >= 5) {
+            return numberMap.get(String(fifth)) + convertNumberToRoman(String(_inputNumber - (fifth)));
+        }
     }
 }
 
@@ -90,15 +90,12 @@ function convertRomanToNumber(inputRomanString) {
     }
     else {
         const currentRomanValueString = romanMap.get(firstLetter);
-        const nextRomanValueString = romanMap.get(secondLetter);
         const currentRomanValue = Number(currentRomanValueString);
+        const nextRomanValueString = romanMap.get(secondLetter);
         const nextRomanValue = Number(nextRomanValueString);
         
         if (currentRomanValue) {
-            console.warn('Input romanValue: ', currentRomanValue);
-
-            if ((currentRomanValue === 1 && nextRomanValue === 5) || (currentRomanValue === 10 && nextRomanValue === 50) || (currentRomanValue === 100 && nextRomanValue === 500) ||
-            (currentRomanValue === 1 && nextRomanValue === 10) || (currentRomanValue === 10 && nextRomanValue === 100) || (currentRomanValue === 100 && nextRomanValue === 1000)) {
+            if (currentRomanValue < nextRomanValue) {
                 return nextRomanValue - currentRomanValue + convertRomanToNumber(inputRomanString.slice(2));
             }
 
